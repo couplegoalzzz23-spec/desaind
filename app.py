@@ -78,8 +78,7 @@ if slides_html:
           display: block; 
           width: 100%; 
           height: 100%; 
-          object-fit: contain; /* <--- INI KUNCINYA: Memastikan gambar utuh 100% tanpa dipotong */
-          object-position: center;
+          object-fit: fill; /* <--- DIUBAH KE FILL: Memaksa gambar merentang penuh ke kiri & kanan layar */
         }}
         .swiper-button-next, .swiper-button-prev {{
           color: #ffffff !important; 
@@ -126,9 +125,7 @@ if slides_html:
     </body>
     </html>
     """
-    # TINGGI DIUBAH KE 280 AGAR MEMBERI RUANG UNTUK GAMBAR UTUH
-    # Jika gambar terlihat masih terlalu kecil/ada ruang kosong di atas-bawah, Anda bisa mengecilkan angka ini (misal 250 atau 220).
-    # Jika gambar terpotong di kiri/kanan, besarkan angka ini (misal 300).
+    # Tinggi dipertahankan di 280 karena Anda menyebutkan tingginya sudah sesuai
     components.html(carousel_html, height=280)
 else:
     st.warning("⚠️ Menunggu gambar diunggah. Pastikan file banner_atas1.png, banner_atas2.png, dan banner_atas3.png sudah berada di dalam folder 'assetdashboard'.")
