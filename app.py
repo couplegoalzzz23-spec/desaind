@@ -12,7 +12,7 @@ st.set_page_config(
 # Kustomisasi CSS: Merapatkan jarak atas dan Sidebar Gelap
 st.markdown("""
     <style>
-        /* Mengurangi padding atas bawaan Streamlit agar banner rapat ke atas seperti web asli */
+        /* Mengurangi padding atas bawaan Streamlit agar banner rapat ke atas */
         .block-container {
             padding-top: 1.5rem !important;
             padding-bottom: 1rem !important;
@@ -20,7 +20,7 @@ st.markdown("""
         
         /* Kustomisasi Sidebar */
         [data-testid="stSidebar"] {
-            background-color: #222222; /* Warna gelap taktis */
+            background-color: #222222;
             color: #ffffff;
         }
         hr {
@@ -69,7 +69,6 @@ if slides_html:
         .swiper {{
           width: 100%; 
           height: 100%; 
-          border-radius: 5px; /* Sedikit melengkung atau bisa diisi 0 jika ingin kotak siku */
           overflow: hidden;
         }}
         .swiper-slide {{
@@ -79,13 +78,13 @@ if slides_html:
           display: block; 
           width: 100%; 
           height: 100%; 
-          object-fit: cover; /* Memastikan gambar memenuhi area tanpa merusak rasio */
-          object-position: center; /* Fokus di tengah gambar */
+          object-fit: contain; /* <--- INI KUNCINYA: Memastikan gambar utuh 100% tanpa dipotong */
+          object-position: center;
         }}
         .swiper-button-next, .swiper-button-prev {{
           color: #ffffff !important; 
           text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-          transform: scale(0.7); /* Mengecilkan ukuran panah navigasi agar tidak menutupi gambar yang pendek */
+          transform: scale(0.7);
         }}
         .swiper-pagination-bullet {{
           background: #ffffff !important; opacity: 0.7;
@@ -127,8 +126,10 @@ if slides_html:
     </body>
     </html>
     """
-    # TINGGI DIUBAH MENJADI 220 AGAR PROPORSIONAL SEPERTI CONTOH WEB NMOC
-    components.html(carousel_html, height=220)
+    # TINGGI DIUBAH KE 280 AGAR MEMBERI RUANG UNTUK GAMBAR UTUH
+    # Jika gambar terlihat masih terlalu kecil/ada ruang kosong di atas-bawah, Anda bisa mengecilkan angka ini (misal 250 atau 220).
+    # Jika gambar terpotong di kiri/kanan, besarkan angka ini (misal 300).
+    components.html(carousel_html, height=280)
 else:
     st.warning("⚠️ Menunggu gambar diunggah. Pastikan file banner_atas1.png, banner_atas2.png, dan banner_atas3.png sudah berada di dalam folder 'assetdashboard'.")
 
@@ -137,7 +138,6 @@ else:
 with st.sidebar:
     st.markdown("### **Navigation**")
     st.write("---")
-    # Menggunakan HTML sederhana untuk meniru gaya navigasi web asli (teks hitam/putih dengan bold)
     st.markdown("#### <a href='#jtwc' style='color: white; text-decoration: none;'>JTWC</a>", unsafe_allow_html=True)
     st.write("---")
     st.markdown("#### <a href='#fnmoc' style='color: white; text-decoration: none;'>FWC-SD</a>", unsafe_allow_html=True)
@@ -145,7 +145,7 @@ with st.sidebar:
     st.markdown("#### <a href='#fnmoc' style='color: white; text-decoration: none;'>FWC-N</a>", unsafe_allow_html=True)
     st.write("---")
 
-# 4. Konten Utama Website (Disesuaikan letaknya di bawah banner)
+# 4. Konten Utama Website
 st.markdown("<div style='background-color: #333333; color: white; padding: 10px; border-radius: 5px;'><b>Naval Meteorology & Oceanography Command | Public Facing</b></div>", unsafe_allow_html=True)
 st.markdown("## Naval Meteorology & Oceanography Command | Public Facing Website")
 
