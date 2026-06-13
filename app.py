@@ -12,7 +12,7 @@ st.set_page_config(
 # Kustomisasi CSS: Merapatkan jarak atas dan Sidebar Gelap
 st.markdown("""
     <style>
-        /* Mengurangi padding atas bawaan Streamlit agar banner rapat ke atas */
+        /* Mengurangi padding atas bawaan Streamlit */
         .block-container {
             padding-top: 1.5rem !important;
             padding-bottom: 1rem !important;
@@ -40,7 +40,7 @@ def get_base64_image(image_path):
     except Exception:
         return ""
 
-# Daftar file banner yang ada di folder GitHub Anda
+# Daftar file banner yang ada di folder Anda
 image_paths = [
     "assetdashboard/banner_atas1.png",
     "assetdashboard/banner_atas2.png",
@@ -72,13 +72,13 @@ if slides_html:
           overflow: hidden;
         }}
         .swiper-slide {{
-          display: flex; justify-content: center; align-items: center; background: transparent;
+          display: flex; justify-content: center; align-items: flex-start; background: transparent;
         }}
         .swiper-slide img {{
           display: block; 
-          width: 100%; 
-          height: 100%; 
-          object-fit: fill; /* <--- DIUBAH KE FILL: Memaksa gambar merentang penuh ke kiri & kanan layar */
+          width: 100%; /* Memaksa gambar melebar penuh ke layar */
+          height: auto; /* Tinggi menyesuaikan secara proporsional, anti peyang */
+          object-fit: contain; 
         }}
         .swiper-button-next, .swiper-button-prev {{
           color: #ffffff !important; 
@@ -125,8 +125,10 @@ if slides_html:
     </body>
     </html>
     """
-    # Tinggi dipertahankan di 280 karena Anda menyebutkan tingginya sudah sesuai
-    components.html(carousel_html, height=280)
+    # TINGGI KONTRIBUTOR DINAIKKAN KE 400
+    # Karena gambarnya sekarang utuh dan proporsional, tingginya secara otomatis akan memakan ruang lebih banyak.
+    # Jika bagian bawah aspal masih terpotong di layar Anda, naikkan angka 400 ini menjadi 450 atau 500.
+    components.html(carousel_html, height=400)
 else:
     st.warning("⚠️ Menunggu gambar diunggah. Pastikan file banner_atas1.png, banner_atas2.png, dan banner_atas3.png sudah berada di dalam folder 'assetdashboard'.")
 
