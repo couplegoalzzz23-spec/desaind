@@ -9,11 +9,18 @@ st.set_page_config(
     layout="wide",
 )
 
-# Kustomisasi Warna Sidebar via CSS agar Taktis/Gelap
+# Kustomisasi CSS: Merapatkan jarak atas dan Sidebar Gelap
 st.markdown("""
     <style>
+        /* Mengurangi padding atas bawaan Streamlit agar banner rapat ke atas seperti web asli */
+        .block-container {
+            padding-top: 1.5rem !important;
+            padding-bottom: 1rem !important;
+        }
+        
+        /* Kustomisasi Sidebar */
         [data-testid="stSidebar"] {
-            background-color: #1a1a1a;
+            background-color: #222222; /* Warna gelap taktis */
             color: #ffffff;
         }
         hr {
@@ -25,7 +32,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Fungsi untuk membaca gambar lokal dan mengubahnya ke Base64 (Mencegah error saat deploy)
+# Fungsi untuk membaca gambar lokal dan mengubahnya ke Base64
 def get_base64_image(image_path):
     try:
         with open(image_path, "rb") as img_file:
@@ -33,14 +40,14 @@ def get_base64_image(image_path):
     except Exception:
         return ""
 
-# Daftar file banner yang ada di GitHub
+# Daftar file banner yang ada di folder GitHub Anda
 image_paths = [
     "assetdashboard/banner_atas1.png",
     "assetdashboard/banner_atas2.png",
     "assetdashboard/banner_atas3.png"
 ]
 
-# Mengumpulkan tag gambar HTML untuk setiap gambar yang berhasil dibaca
+# Mengumpulkan tag gambar HTML
 slides_html = ""
 for path in image_paths:
     img_b64 = get_base64_image(path)
@@ -60,17 +67,25 @@ if slides_html:
           margin: 0; padding: 0; background: transparent; height: 100%;
         }}
         .swiper {{
-          width: 100%; height: 100%; border-radius: 10px; overflow: hidden;
+          width: 100%; 
+          height: 100%; 
+          border-radius: 5px; /* Sedikit melengkung atau bisa diisi 0 jika ingin kotak siku */
+          overflow: hidden;
         }}
         .swiper-slide {{
           display: flex; justify-content: center; align-items: center; background: transparent;
         }}
         .swiper-slide img {{
-          display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;
+          display: block; 
+          width: 100%; 
+          height: 100%; 
+          object-fit: cover; /* Memastikan gambar memenuhi area tanpa merusak rasio */
+          object-position: center; /* Fokus di tengah gambar */
         }}
         .swiper-button-next, .swiper-button-prev {{
           color: #ffffff !important; 
           text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+          transform: scale(0.7); /* Mengecilkan ukuran panah navigasi agar tidak menutupi gambar yang pendek */
         }}
         .swiper-pagination-bullet {{
           background: #ffffff !important; opacity: 0.7;
@@ -92,12 +107,12 @@ if slides_html:
       <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
       <script>
         var swiper = new Swiper(".mySwiper", {{
-          spaceBetween: 10,
+          spaceBetween: 0,
           centeredSlides: true,
           loop: true,
           autoplay: {{
-            delay: 4000, /* Waktu jeda geser otomatis (4 detik) */
-            disableOnInteraction: false, /* Tetap autoplay walau sudah digeser manual */
+            delay: 4000, 
+            disableOnInteraction: false, 
           }},
           pagination: {{
             el: ".swiper-pagination",
@@ -112,47 +127,48 @@ if slides_html:
     </body>
     </html>
     """
-    # Menampilkan slider, nilai height (350) bisa Anda sesuaikan agar proporsional dengan gambar
-    components.html(carousel_html, height=350)
+    # TINGGI DIUBAH MENJADI 220 AGAR PROPORSIONAL SEPERTI CONTOH WEB NMOC
+    components.html(carousel_html, height=220)
 else:
-    st.warning("⚠️ Menunggu gambar diunggah. Pastikan file banner_atas1.png, banner_atas2.png, dan banner_atas3.png sudah berada di dalam folder 'assetdashboard' pada repository Anda.")
+    st.warning("⚠️ Menunggu gambar diunggah. Pastikan file banner_atas1.png, banner_atas2.png, dan banner_atas3.png sudah berada di dalam folder 'assetdashboard'.")
 
-st.write("---")
 
 # 3. Struktur Navigasi Kiri (Sidebar)
 with st.sidebar:
-    st.markdown("## **Navigation**")
+    st.markdown("### **Navigation**")
     st.write("---")
-    st.markdown("### [**JTWC**](#jtwc)")
+    # Menggunakan HTML sederhana untuk meniru gaya navigasi web asli (teks hitam/putih dengan bold)
+    st.markdown("#### <a href='#jtwc' style='color: white; text-decoration: none;'>JTWC</a>", unsafe_allow_html=True)
     st.write("---")
-    st.markdown("### [**FNMOC (FWC-SD)**](#fnmoc)")
+    st.markdown("#### <a href='#fnmoc' style='color: white; text-decoration: none;'>FWC-SD</a>", unsafe_allow_html=True)
+    st.write("---")
+    st.markdown("#### <a href='#fnmoc' style='color: white; text-decoration: none;'>FWC-N</a>", unsafe_allow_html=True)
     st.write("---")
 
-# 4. Konten Utama Website
-st.markdown("#### **Naval Meteorology & Oceanography Command | Public Facing**")
-st.title("Naval Meteorology & Oceanography Command | Public Facing Website")
+# 4. Konten Utama Website (Disesuaikan letaknya di bawah banner)
+st.markdown("<div style='background-color: #333333; color: white; padding: 10px; border-radius: 5px;'><b>Naval Meteorology & Oceanography Command | Public Facing</b></div>", unsafe_allow_html=True)
+st.markdown("## Naval Meteorology & Oceanography Command | Public Facing Website")
 
 st.write(
-    "The **United States Naval Meteorology and Oceanography Command (NMOC)** provides critical information "
+    "**The United States Naval Meteorology and Oceanography Command (NMOC)** provides critical information "
     "from the ocean depths to the most distant reaches of space, meeting needs in the military, scientific, "
     "and civilian communities."
 )
 st.write("The following NMOC components make their products available to the public through this portal:")
-st.write("---")
+
+st.write("")
 
 # Konten JTWC
 st.markdown("<div id='jtwc'></div>", unsafe_allow_html=True)
-st.subheader("The Joint Typhoon Warning Center (JTWC)")
 st.write(
-    "The Joint Typhoon Warning Center (JTWC) is the U.S. Department of Defense agency "
+    "The [Joint Typhoon Warning Center (JTWC)](#) is the U.S. Department of Defense agency "
     "responsible for issuing tropical cyclone warnings for the Pacific and Indian Oceans."
 )
-st.write("---")
+st.write("")
 
 # Konten FNMOC
 st.markdown("<div id='fnmoc'></div>", unsafe_allow_html=True)
-st.subheader("The Fleet Numerical Meteorology and Oceanography Center (FNMOC)")
 st.write(
-    "FNMOC provides the highest quality, most relevant and timely worldwide meteorology "
-    "and oceanography support to U.S. and coalition forces."
+    "The [Fleet Numerical Meteorology and Oceanography Center (FNMOC)](#) provides the highest quality, most relevant and timely worldwide meteorology "
+    "and oceanography support to U.S. and coalition forces from its Operations Center in Monterey, California."
 )
