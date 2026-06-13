@@ -1,4 +1,6 @@
 import streamlit as st
+import streamlit.components.v1 as components
+import base64
 
 # 1. Konfigurasi Halaman Web (Mode Lebar Penuh)
 st.set_page_config(
@@ -23,8 +25,98 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 2. Menampilkan Banner Canva yang Baru Saja Anda Upload
-st.image("assetdashboard/banner_atas.png", use_container_width=True)
+# Fungsi untuk membaca gambar lokal dan mengubahnya ke Base64 (Mencegah error saat deploy)
+def get_base64_image(image_path):
+    try:
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    except Exception:
+        return ""
+
+# Daftar file banner yang ada di GitHub
+image_paths = [
+    "assetdashboard/banner_atas1.png",
+    "assetdashboard/banner_atas2.png",
+    "assetdashboard/banner_atas3.png"
+]
+
+# Mengumpulkan tag gambar HTML untuk setiap gambar yang berhasil dibaca
+slides_html = ""
+for path in image_paths:
+    img_b64 = get_base64_image(path)
+    if img_b64:
+         slides_html += f'<div class="swiper-slide"><img src="data:image/png;base64,{img_b64}" /></div>\n'
+
+# 2. Menampilkan Banner Carousel dengan Swiper.js
+if slides_html:
+    carousel_html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+      <style>
+        html, body {{
+          margin: 0; padding: 0; background: transparent; height: 100%;
+        }}
+        .swiper {{
+          width: 100%; height: 100%; border-radius: 10px; overflow: hidden;
+        }}
+        .swiper-slide {{
+          display: flex; justify-content: center; align-items: center; background: transparent;
+        }}
+        .swiper-slide img {{
+          display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;
+        }}
+        .swiper-button-next, .swiper-button-prev {{
+          color: #ffffff !important; 
+          text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        }}
+        .swiper-pagination-bullet {{
+          background: #ffffff !important; opacity: 0.7;
+        }}
+        .swiper-pagination-bullet-active {{
+          opacity: 1;
+        }}
+      </style>
+    </head>
+    <body>
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          {slides_html}
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+      <script>
+        var swiper = new Swiper(".mySwiper", {{
+          spaceBetween: 10,
+          centeredSlides: true,
+          loop: true,
+          autoplay: {{
+            delay: 4000, /* Waktu jeda geser otomatis (4 detik) */
+            disableOnInteraction: false, /* Tetap autoplay walau sudah digeser manual */
+          }},
+          pagination: {{
+            el: ".swiper-pagination",
+            clickable: true,
+          }},
+          navigation: {{
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          }},
+        }});
+      </script>
+    </body>
+    </html>
+    """
+    # Menampilkan slider, nilai height (350) bisa Anda sesuaikan agar proporsional dengan gambar
+    components.html(carousel_html, height=350)
+else:
+    st.warning("⚠️ Menunggu gambar diunggah. Pastikan file banner_atas1.png, banner_atas2.png, dan banner_atas3.png sudah berada di dalam folder 'assetdashboard' pada repository Anda.")
+
 st.write("---")
 
 # 3. Struktur Navigasi Kiri (Sidebar)
